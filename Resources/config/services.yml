@@ -1,7 +1,14 @@
 parameters:
-#    Volleyball_user.example.class: Volleyball\UserBundle\Example
+    volleyball.repository.user.class: Volleyball\Bundle\UserBundle\Repository\UserRepository
+    volleyball.repository.user.entity: Volleyball\Bundle\UserBundle\Entity\User
+    
+    volleyball.repository.admin.class: Volleyball\Bundle\UserBundle\Repository\AdminRepository
+    volleyball.repository.admin.entity: Volleyball\Bundle\UserBundle\Entity\Admin
 
 services:
-    volleyball.repositories.user:
-        class: Volleyball\Repositories\UserRepository
-        tags: [{ name:repository, alias: vb.repo.user }]
+    volleyball.repository.user:
+        class: %volleyball.repository.user.entity%
+        tag: [{ name: volleyball.repository, alias: user }]
+    volleyball.repository.admin:
+        class: %volleyball.repository.admin.entity%
+        tag: [{ name: volleyball.repository, alias: admin }]

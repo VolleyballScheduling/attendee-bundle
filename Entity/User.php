@@ -10,7 +10,7 @@ use PUGX\MultiUserBundle\Validator\Constraints\UniqueEntity;
 use Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Volleyball\Bundle\UserBundle\Repository\UserRepository")
  * @ORM\Table(name="fos_user")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="type", type="string")
