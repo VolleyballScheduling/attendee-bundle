@@ -2,18 +2,19 @@
 namespace Volleyball\Bundle\UserBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-use FOS\UserBundle\Form\Type\RegistrationFormType as BaseType;
 
-class RegistrationFormType extends BaseType
+class RegistrationFormType extends \FOS\UserBundle\Form\Type\RegistrationFormType
 {
-    public function buildForm( FormBuilderInterface $builder, array $options )
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
 
-        $builder->add( 'type' );
-//        $builder->add( 'terms', 'checkbox', array(
-//            'property_path' =>  'termsAccepted'
-//        ));
+        $builder->add('type');
+//        $builder->add(
+//              'terms',
+//              'checkbox',
+//              array('property_path' =>  'termsAccepted')
+//        );
     }
 
     public function getName()

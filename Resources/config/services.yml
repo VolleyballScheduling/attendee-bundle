@@ -6,9 +6,9 @@ parameters:
     volleyball.repository.admin.entity: Volleyball\Bundle\UserBundle\Entity\Admin
 
 services:
-    volleyball.repository.user:
-        class: %volleyball.repository.user.entity%
-        tag: [{ name: volleyball.repository, alias: user }]
-    volleyball.repository.admin:
-        class: %volleyball.repository.admin.entity%
-        tag: [{ name: volleyball.repository, alias: admin }]
+#    volleyball.repository.user:
+#        class: %volleyball.repository.user.entity%
+#        tag: [{ name: volleyball.repository, alias: user }]
+#    volleyball.repository.admin:
+#        class: %volleyball.repository.admin.entity%
+#        tag: [{ name: volleyball.repository, alias: admin }]

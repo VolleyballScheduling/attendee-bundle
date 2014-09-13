@@ -3,6 +3,7 @@ namespace Volleyball\Bundle\UserBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
@@ -22,7 +23,7 @@ class UserController extends Controller
      * @Route("/users", name="volleyball_user_index")
      * @return  array 
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         return $this->forward('VolleyballUtilityBundle:Homepage:index');
     }
@@ -40,7 +41,7 @@ class UserController extends Controller
         );
     }
 
-    public function createAction()
+    public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
 

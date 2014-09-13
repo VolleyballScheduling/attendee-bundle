@@ -4,7 +4,6 @@ namespace Volleyball\Bundle\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-use FOS\UserBundle\Entity\User as BaseUser;
 use PUGX\MultiUserBundle\Validator\Constraints\UniqueEntity;
 
 use Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
@@ -19,7 +18,8 @@ use Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
  *         "faculty" = "Volleyball\Bundle\FacilityBundle\Entity\Faculty", 
  *         "passel_leader" = "Volleyball\Bundle\PasselBundle\Entity\Leader", 
  *         "attendee" = "Volleyball\Bundle\PasselBundle\Entity\Attendee", 
- *         "admin" = "Admin"
+ *         "admin" = "Volleyball\Bundle\UserBundle\Entity\Admin",
+ *         "user" = "Volleyball\Bundle\UserBundle\Entity\User"
  *     }
  * )
  * @UniqueEntity(
@@ -34,7 +34,7 @@ use Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
  *)
  *
  */
-abstract class User extends BaseUser
+class User extends \FOS\UserBundle\Model\User
 {
     use TimestampableTrait;
 
@@ -257,12 +257,12 @@ abstract class User extends BaseUser
     }
 
     /**
-     * @param  string $firstName
+     * @param  string $firstname
      * @return User
      */
-    public function setFirstName($first_name)
+    public function setFirstName($firstname)
     {
-        $this->first_name = $first_name;
+        $this->firstName = $firstname;
 
         return $this;
     }
@@ -274,18 +274,18 @@ abstract class User extends BaseUser
      */
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
      * Set last_name
      *
-     * @param  string $lastName
+     * @param  string $lastname
      * @return User
      */
-    public function setLastName($last_name)
+    public function setLastName($lastname)
     {
-        $this->last_name = $last_name;
+        $this->lastName = $lastname;
 
         return $this;
     }
@@ -297,7 +297,7 @@ abstract class User extends BaseUser
      */
     public function getLastName()
     {
-        return $this->last_name;
+        return $this->lastName;
     }
 
     /**
