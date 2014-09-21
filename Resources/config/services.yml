@@ -1,14 +1,11 @@
-parameters:
-    volleyball.repository.user.class: Volleyball\Bundle\UserBundle\Repository\UserRepository
-    volleyball.repository.user.entity: Volleyball\Bundle\UserBundle\Entity\User
-    
-    volleyball.repository.admin.class: Volleyball\Bundle\UserBundle\Repository\AdminRepository
-    volleyball.repository.admin.entity: Volleyball\Bundle\UserBundle\Entity\Admin
-
 services:
-#    volleyball.repository.user:
-#        class: %volleyball.repository.user.entity%
-#        tag: [{ name: volleyball.repository, alias: user }]
-#    volleyball.repository.admin:
-#        class: %volleyball.repository.admin.entity%
-#        tag: [{ name: volleyball.repository, alias: admin }]
+    volleyball.controller.user:
+        class: Volleyball\Bundle\UserBundle\Controller\UserController
+        factory_service: sylius.controller.configuration_factory
+        factory_method: createConfiguration
+        arguments: ["sylius", "user", "VolleyballUserBundle:User"]
+    volleyball.controller.admin:
+        class: Volleyball\Bundle\UserBundle\Controller\AdminController
+        factory_service: sylius.controller.configuration_factory
+        factory_method: createConfiguration
+        arguments: ["sylius", "admin", "VolleyballUserBundle:Admin"]
