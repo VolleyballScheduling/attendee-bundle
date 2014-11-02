@@ -1,12 +1,13 @@
 <?php
 namespace Volleyball\Bundle\UserBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
-use PUGX\MultiUserBundle\Validator\Constraints\UniqueEntity;
+use \Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\ArrayCollection;
+use \Gedmo\Mapping\Annotation as Gedmo;
+use \Symfony\Component\Validator\Constraints as Assert;
+use \PUGX\MultiUserBundle\Validator\Constraints\UniqueEntity;
 
-use Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
+use \Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
 
 /**
  * @ORM\Entity(repositoryClass="Volleyball\Bundle\UserBundle\Repository\UserRepository")
@@ -34,7 +35,7 @@ use Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
  *)
  *
  */
-class User extends \FOS\UserBundle\Model\User
+class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\User\Interfaces\UserInterface
 {
     use TimestampableTrait;
 
@@ -96,6 +97,7 @@ class User extends \FOS\UserBundle\Model\User
      */
     protected $gender;
 
+    protected $email;
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
@@ -106,7 +108,7 @@ class User extends \FOS\UserBundle\Model\User
      * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\EnrollmentBundle\Entity\PasselEnrollment", inversedBy="user")
      * @ORM\JoinColumn(name="activeEnrollmentId", referencedColumnName="id", nullable=true)
      */
-    protected $activeEnrollment;
+    protected $active_enrollment;
 
     /**
      * @var string
@@ -148,7 +150,7 @@ class User extends \FOS\UserBundle\Model\User
      *
      * @ORM\Column(name="avatar", type="string", length=255)
      */
-    protected $avatar = '/bundles/Volleyballuser/img/avatars/default.png';
+    protected $avatar = '/bundles/volleyballresource/images/avatars/default.png';
 
     /**
     * @Gedmo\Slug(fields={"lastName", "firstName"})
@@ -200,9 +202,9 @@ class User extends \FOS\UserBundle\Model\User
      * @param  Volleyball\Bundle\EnrollmentBundle\Entity\PasselEnrollment $activeEnrollment
      * @return User
      */
-    public function setActiveEnrollment(ActiveEnrollment $activeEnrollment = null)
+    public function setActiveEnrollment(\Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment $active_enrollment = null)
     {
-        $this->activeEnrollment = $activeEnrollment;
+        $this->activeEnrollment = $active_enrollment;
 
         return $this;
     }
@@ -214,7 +216,7 @@ class User extends \FOS\UserBundle\Model\User
      */
     public function getActiveEnrollment()
     {
-        return $this->activeEnrollment;
+        return $this->active_enrollment;
     }
 
     /**
@@ -298,6 +300,29 @@ class User extends \FOS\UserBundle\Model\User
     public function getLastName()
     {
         return $this->lastName;
+    }
+    
+    /**
+     * Set username
+     *
+     * @param  string $username
+     * @return User
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username
+     *
+     * @return string
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 
     /**
@@ -449,7 +474,7 @@ class User extends \FOS\UserBundle\Model\User
      * @param \DateTime $birthdate
      * @return User
      */
-    public function setBirthdate($birthdate)
+    public function setBirthdate(\DateTime $birthdate)
     {
         $this->birthdate = $birthdate;
     
