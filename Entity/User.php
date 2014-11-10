@@ -16,11 +16,11 @@ use \Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap(
  *     {
- *         "faculty" = "Volleyball\Bundle\FacilityBundle\Entity\Faculty", 
- *         "passel_leader" = "Volleyball\Bundle\PasselBundle\Entity\Leader", 
- *         "attendee" = "Volleyball\Bundle\PasselBundle\Entity\Attendee", 
- *         "admin" = "Volleyball\Bundle\UserBundle\Entity\Admin",
- *         "user" = "Volleyball\Bundle\UserBundle\Entity\User"
+ *         "user" = "\Volleyball\Bundle\UserBundle\Entity\User",
+ *         "faculty" = "\Volleyball\Bundle\FacilityBundle\Entity\Faculty", 
+ *         "passel_leader" = "\Volleyball\Bundle\PasselBundle\Entity\Leader", 
+ *         "attendee" = "\Volleyball\Bundle\PasselBundle\Entity\Attendee", 
+ *         "admin" = "\Volleyball\Bundle\UserBundle\Entity\Admin"
  *     }
  * )
  * @UniqueEntity(
@@ -47,16 +47,6 @@ class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\U
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
      * @ORM\Column(type="string")
@@ -96,8 +86,7 @@ class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\U
      * @Assert\Choice(choices = {"M", "F"})
      */
     protected $gender;
-
-    protected $email;
+   
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
@@ -105,10 +94,10 @@ class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\U
     protected $birthdate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\EnrollmentBundle\Entity\PasselEnrollment", inversedBy="user")
-     * @ORM\JoinColumn(name="activeEnrollmentId", referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment", inversedBy="user")
+     * @ORM\JoinColumn(name="activeEnrollment_id", referencedColumnName="id", nullable=true)
      */
-    protected $active_enrollment;
+    protected $activeEnrollment;
 
     /**
      * @var string
@@ -157,7 +146,17 @@ class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\U
     * @ORM\Column(length=128, unique=true)
     */
     protected $slug;
-
+    
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
     /**
      * Get slug
      */
@@ -202,9 +201,9 @@ class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\U
      * @param  Volleyball\Bundle\EnrollmentBundle\Entity\PasselEnrollment $activeEnrollment
      * @return User
      */
-    public function setActiveEnrollment(\Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment $active_enrollment = null)
+    public function setActiveEnrollment(\Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment $activeEnrollment = null)
     {
-        $this->activeEnrollment = $active_enrollment;
+        $this->activeEnrollment = $activeEnrollment;
 
         return $this;
     }
@@ -489,5 +488,19 @@ class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\U
     public function getBirthdate()
     {
         return $this->birthdate;
+    }
+    
+    /**
+     * @inheritdoc
+     */
+    public function isEnabled($enabled = null)
+    {
+        if (null == $enabled) {
+            return (bool) $this->enabled;
+        }
+        
+        $this->enabled = $enabled   ;
+        
+        return $this;
     }
 }

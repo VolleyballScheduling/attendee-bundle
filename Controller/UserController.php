@@ -1,19 +1,15 @@
 <?php
 namespace Volleyball\Bundle\UserBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\Request;
+use \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use \Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use \Symfony\Component\HttpFoundation\Request;
 
-use Pagerfanta\Pagerfanta;
-use Pagerfanta\Adapter\DoctrineORMAdapter;
-use Pagerfanta\Exception\NotValidCurrentPageException;
+use \Pagerfanta\Pagerfanta;
+use \Pagerfanta\Adapter\DoctrineORMAdapter;
+use \Pagerfanta\Exception\NotValidCurrentPageException;
 
-use Volleyball\Bundle\UtilityBundle\Entity\Carousel;
-use Volleyball\Bundle\UtilityBundle\Entity\CarouselItem;
-use Volleyball\Bundle\UtilityBundle\Controller\UtilityController as Controller;
-
-class UserController extends Controller
+class UserController extends \Volleyball\Bundle\UtilityBundle\Controller\UtilityController
 {
     protected $available_roles = array();
 
@@ -28,17 +24,16 @@ class UserController extends Controller
         return $this->forward('VolleyballUtilityBundle:Homepage:index');
     }
 
+    /**
+     * @Route("/signup", name="volleyball_user_register")
+     * @Template("VolleyballResourceBundle:User:register.html.twig")
+     */
     public function registerAction()
     {
-        $form = $this->createForm(
-            new RegistrationType(),
-            new Registration()
-        );
-
-        return $this->render(
-            'VolleyballUserBundle:User:register.html.twig',
-            array('form'  =>  $form->createView())
-        );
+        return $this
+                ->container
+                ->get('pugx_multi_user.registration_manager')
+                ->register('\Volleyball\Bundle\UserBundle\Entity\User');
     }
 
     public function createAction(Request $request)
@@ -58,9 +53,6 @@ class UserController extends Controller
             return $this->redirect('VolleyballUserBundle:User:dashboard');
         }
 
-        return $this->render(
-            'VolleyballUserBundle:User:register.html.twig',
-            array('form'  =>  $form->createView())
-        );
+        return array('form'  =>  $form->createView());
     }
 }
