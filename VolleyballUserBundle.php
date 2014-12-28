@@ -5,6 +5,8 @@ use \Symfony\Component\DependencyInjection\ContainerBuilder;
 use \Sylius\Bundle\ResourceBundle\AbstractResourceBundle;
 use \Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 
+use \Volleyball\Bundle\UserBundle\DependencyInjection\Compiler\OverrideServiceCompilerPass;
+
 class VolleyballUserBundle extends AbstractResourceBundle
 {
     /**
@@ -23,6 +25,8 @@ class VolleyballUserBundle extends AbstractResourceBundle
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
+        
+        $container->addCompilerPass(new OverrideServiceCompilerPass());
     }
     
     /**

@@ -4,7 +4,7 @@ namespace Volleyball\Bundle\UserBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
-use PUGX\MultiUserBundle\Validator\Constraints\UniqueEntity;
+use Volleyball\Bundle\UserBundle\Validator\Constraints\UniqueEntity;
 
 use Volleyball\Bundle\UserBundle\Entity\User;
 

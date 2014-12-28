@@ -5,7 +5,7 @@ use \Doctrine\ORM\Mapping as ORM;
 use \Doctrine\Common\Collections\ArrayCollection;
 use \Gedmo\Mapping\Annotation as Gedmo;
 use \Symfony\Component\Validator\Constraints as Assert;
-use \PUGX\MultiUserBundle\Validator\Constraints\UniqueEntity;
+use \Volleyball\Bundle\UserBundle\Validator\Constraints\UniqueEntity;
 
 use \Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
 
@@ -35,7 +35,7 @@ use \Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
  *)
  *
  */
-class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\User\Interfaces\UserInterface
+class User extends \FOS\UserBundle\Model\User
 {
     use TimestampableTrait;
 
@@ -502,5 +502,10 @@ class User extends \FOS\UserBundle\Model\User implements \Volleyball\Component\U
         $this->enabled = $enabled   ;
         
         return $this;
+    }
+    
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }

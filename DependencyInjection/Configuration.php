@@ -1,15 +1,9 @@
 <?php
-
 namespace Volleyball\Bundle\UserBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use Symfony\Component\Config\Definition\ConfigurationInterface;
+use \Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use \Symfony\Component\Config\Definition\ConfigurationInterface;
 
-/**
- * This is the class that validates and merges configuration from your app/config files
- *
- * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
- */
 class Configuration implements ConfigurationInterface
 {
     /**
@@ -20,9 +14,78 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('volleyball_user');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $supportedDrivers = array('orm'); //, 'mongodm');
+
+        $rootNode->
+            children()
+                ->scalarNode('db_driver')
+                    ->defaultValue('orm')
+                    ->validate()
+                        ->ifNotInArray($supportedDrivers)
+                        ->thenInvalid('The driver %s is not supported. Please choose one of '.json_encode($supportedDrivers))
+                    ->end()
+                ->end();
+
+        $rootNode->
+            children()
+                ->scalarNode('user_manager')
+                    ->defaultValue('volleyball.user.manager.orm_user_manager.default')
+                    ->end()
+                ->end();
+
+        $rootNode->
+                children()
+                    ->arrayNode('users')->prototype('array')
+                        ->children()
+                            ->arrayNode('entity')
+                                ->children()
+                                    ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                                    ->scalarNode('factory')->defaultValue('Volleyball\Bundle\UserBundle\Factory\UserFactory')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->children()
+                            ->arrayNode('registration')
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->arrayNode('form')
+                                    ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->scalarNode('type')->defaultValue(null)->end()
+                                            ->scalarNode('name')->defaultValue('fos_user_registration_form')->end()
+                                            ->arrayNode('validation_groups')
+                                                ->prototype('scalar')->end()
+                                                ->defaultValue(array('Registration', 'Default'))
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                    ->scalarNode('template')->defaultValue(null)->end()
+                                 ->end()
+                            ->end()
+                        ->end()
+                        ->children()
+                            ->arrayNode('profile')
+                                ->addDefaultsIfNotSet()
+                                ->children()
+                                    ->arrayNode('form')
+                                    ->addDefaultsIfNotSet()
+                                        ->children()
+                                            ->scalarNode('type')->defaultValue(null)->end()
+                                            ->scalarNode('name')->defaultValue('fos_user_profile_form')->end()
+                                            ->arrayNode('validation_groups')
+                                                ->prototype('scalar')->end()
+                                                ->defaultValue(array('Profile', 'Default'))
+                                            ->end()
+                                        ->end()
+                                    ->end()
+                                    ->scalarNode('template')->defaultValue(null)->end()
+                                 ->end()
+                            ->end()
+                        ->end()
+
+                    ->end()
+                ->end()
+                ->end();
 
         return $treeBuilder;
     }

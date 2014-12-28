@@ -1,11 +1,120 @@
+parameters:
+    # Flow
+    volleyball.flow.scenario.register: Volleyball\Bundle\UserBundle\Process\Scenario\RegistrationScenario
+    
+    # User Manipulation
+    volleyball.user.manager.orm.class: Volleyball\Bundle\UserBundle\Manager\UserManager
+    volleyball.user.manipulator.class: Volleyball\Bundle\UserBundle\Util\UserManipulator
+    volleyball.user.user_discriminator.class: Volleyball\Bundle\UserBundle\Discriminator\UserDiscriminator
+    
+    # Management
+    volleyball.user.registration_manager.class: Volleyball\Bundle\UserBundle\Manager\RegistrationManager
+    volleyball.user.profile_manager.class: Volleyall\Bundle\UserBundle\Manager\ProfileManager
+    
+    # Form
+    volleyball.user.form_factory.class: Volleyball\Bundle\Form\Factory\FormFactory
+    volleyball.user.registration_form_factory.class: %volleyball.user.form_factory.class%
+    volleyball.user.profile_form_factory.class: %volleyball.user.form_factory.class%
+        
+    # Listener
+    volleyball.user.listener.authentication.class: Volleyball\Bundle\UserBundle\Listener\AuthenticationListener
+    
+    # Validator
+    volleyball.user.validator.orm.unique.class: Volleyball\Bundle\UserBundle\Validator\Constraints\UniqueEntityValidator
+    
+    # Controller
+    volleyball.user.registration_controller.class: FOS\UserBundle\Controller\RegistrationController
+    volleyball.user.profile_controller.class: FOS\UserBundle\Controller\ProfileController
 services:
-    volleyball.controller.user:
-        class: Volleyball\Bundle\UserBundle\Controller\UserController
-        factory_service: sylius.controller.configuration_factory
-        factory_method: createConfiguration
-        arguments: ["sylius", "user", "VolleyballUserBundle:User"]
-    volleyball.controller.admin:
-        class: Volleyball\Bundle\UserBundle\Controller\AdminController
-        factory_service: sylius.controller.configuration_factory
-        factory_method: createConfiguration
-        arguments: ["sylius", "admin", "VolleyballUserBundle:Admin"]
+     # Flows
+    volleyball.scenario.register.flow:
+        class: %volleyball.flow.scenario.register%
+        tags: [{ name: sylius.process.scenario, alias: volleyball.register.flow }]
+        calls: [[setContainer, [@service_container]]]
+    
+    # User Manager
+    volleyball.user.manager.orm:
+        class: %volleyball.user.manager.orm.class%
+        arguments:
+            - "@security.encoder_factory"
+            - "@fos_user.util.username_canonicalizer"
+            - "@fos_user.util.email_canonicalizer"
+            - "@fos_user.entity_manager"
+            - %fos_user.model.user.class%
+            - "@volleyball.user.manager.user_discriminator"
+    volleyball.user_manager:
+        alias: volleyball.user.manager.orm
+    
+    # User Manipulator
+    volleyball.user_manipulator:
+        class: %volleyball.user.manipulator.class%
+        arguments:
+            userManager: "@volleyball.user_manager"
+            container: "@service_container"
+            configuration: %volleyball.user.discriminator.configs%
+            userTypes: %volleyball.user.discriminator.user_types%
+    
+    # User Discriminator
+    volleyball.user.manager.user_discriminator:
+        class: %volleyball.user.user_discriminator.class%
+        arguments:
+            - "@session"
+            - %volleyball.user.discriminator.configs%
+            - %volleyball.user.discriminator.user_types%
+    volleyball.user.discriminator:
+        alias: volleyball.user.manager.user_discriminator
+    
+    # Registration Manager
+    volleyball.user.registration_manager:
+        class: %volleyball.user.registration_manager.class%
+        arguments:
+            - "@volleyball.user.manager.user_discriminator"
+            - "@service_container"
+            - "@volleyball.user.registration_controller"
+            - "@fos_user.registration.form.factory"
+            
+    # Registration Form Factory
+    volleyball.user.registration_form_factory:
+        class: %volleyball.user.registration_form_factory.class%
+        arguments:
+            - "@volleyball.user.manager.user_discriminator"
+            - "@form.factory"
+            - "registration"
+    
+    # Profile Manager
+    volleyball.user.profile_manager:
+        class: %volleyball.user.profile_manager.class%
+        arguments:
+            - "@volleyball.user.manager.user_discriminator"
+            - "@service_container"
+            - "@volleyball.user.profile_controller"
+            - "@fos_user.profile.form.factory"
+    
+    # Profile Form Factory
+    volleyball.user.profile_form_factory:
+        class: Volleyball\Bundle\UserBundle\Form\Factory\FormFactory
+        arguments:
+            - "@volleyball.user.manager.user_discriminator"
+            - "@form.factory"
+            - "profile"
+            
+    # Authentication Listener
+    volleyball.user.listener.authentication:
+        class: %volleyball.user.listener.authentication.class%
+        arguments: ["@volleyball.user.manager.user_discriminator"]
+        tags: [{name: kernel.event_subscriber}]
+    
+    # ORM User Validator
+    volleyball.user.validator.orm.unique:
+        class: %volleyball.user.validator.orm.unique.class%
+        arguments: ["@doctrine"]
+        tags: [{name: validator.constraint_validator, alias: volleyball.org.validator.unique}]
+        
+    # Registration Controller
+    volleyball.user.registration_controller:
+        class: %volleyball.user.registration_controller.class%
+        
+    # Profile Controller
+    volleyball.user.profile_controller:
+        class: %volleyball.user.profile_controller.class%
+    
