@@ -1,9 +1,10 @@
 <?php
-namespace Volleyball\Bundle\UserBundle\DependencyInjection;
+namespace Volleyball\Bundle\AttendeeBundle\DependencyInjection;
 
 use \Symfony\Component\DependencyInjection\ContainerBuilder;
 use \Symfony\Component\Config\FileLocator;
 use \Symfony\Component\DependencyInjection\Loader;
+use \Doctrine\Common\Collections\ArrayCollection;
 
 class VolleyballUserExtension extends \Symfony\Component\HttpKernel\DependencyInjection\Extension
 {
@@ -16,16 +17,13 @@ class VolleyballUserExtension extends \Symfony\Component\HttpKernel\DependencyIn
         $config = $this->processConfiguration($configuration, $configs);
 
         // users
-        $users = $config['users'];
-        $container->setParameter('volleyball.user.discriminator.users', $users);
+        $container->setParameter('volleyball.user.discriminator.users', $config['users']);
         
         // configs
-        $d_config = $this->buildConfiguration($users);
-        $container->setParameter('volleyball.user.discriminator.configs', $d_config);
+        $container->setParameter('volleyball.user.discriminator.configs', $this->buildConfiguration($config['users']));
         
         // user types
-        $userTypes = $this->buildUserTypes($users);
-        $container->setParameter('volleyball.user.discriminator.user_types', $userTypes);
+        $container->setParameter('volleyball.user.discriminator.user_types', $this->buildUserTypes($config['users']));
         
         $container->setAlias('volleyball.user.manager.orm', $config['user_manager']);
         
@@ -40,6 +38,7 @@ class VolleyballUserExtension extends \Symfony\Component\HttpKernel\DependencyIn
      */
     protected function buildConfiguration(array $parameters)
     {
+        $configs = array();
         foreach ($parameters as $parameter) {
             $class = $parameter['entity']['class'];
             if (!class_exists($class)) {
@@ -48,7 +47,7 @@ class VolleyballUserExtension extends \Symfony\Component\HttpKernel\DependencyIn
                 );
             }
             
-            $config = array();
+            $config = new ArrayCollection();
             $config[$class] = array(
                     'factory' => $parameter['entity']['factory'],
                     'registration' => array(
@@ -68,8 +67,9 @@ class VolleyballUserExtension extends \Symfony\Component\HttpKernel\DependencyIn
                         'template' => $parameter['profile']['template'],
                     ),
                 );
+            $configs[$class] = $config;
         }
-        return $config;
+        return $configs;
     }
     
     /**
@@ -92,5 +92,4 @@ class VolleyballUserExtension extends \Symfony\Component\HttpKernel\DependencyIn
         }
         return $userTypes;
     }
-
 }

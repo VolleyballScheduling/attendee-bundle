@@ -1,13 +1,13 @@
 <?php
-namespace Volleyball\Bundle\UserBundle;
+namespace Volleyball\Bundle\AttendeeBundle;
 
 use \Symfony\Component\DependencyInjection\ContainerBuilder;
 use \Sylius\Bundle\ResourceBundle\AbstractResourceBundle;
 use \Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 
-use \Volleyball\Bundle\UserBundle\DependencyInjection\Compiler\OverrideServiceCompilerPass;
+use \Volleyball\Bundle\AttendeeBundle\DependencyInjection\Compiler\OverrideServiceCompilerPass;
 
-class VolleyballUserBundle extends AbstractResourceBundle
+class VolleyballAttendeeBundle extends AbstractResourceBundle
 {
     /**
      * {@inheritdoc}

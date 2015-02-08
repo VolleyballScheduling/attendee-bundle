@@ -1,5 +1,5 @@
 <?php
-namespace Volleyball\Bundle\UserBundle\DependencyInjection;
+namespace Volleyball\Bundle\AttendeeBundle\DependencyInjection;
 
 use \Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use \Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -40,7 +40,7 @@ class Configuration implements ConfigurationInterface
                             ->arrayNode('entity')
                                 ->children()
                                     ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
-                                    ->scalarNode('factory')->defaultValue('Volleyball\Bundle\UserBundle\Factory\UserFactory')->end()
+                                    ->scalarNode('factory')->defaultValue('\Volleyball\Bundle\AttendeeBundle\Factory\UserFactory')->end()
                                 ->end()
                             ->end()
                         ->end()
@@ -52,7 +52,7 @@ class Configuration implements ConfigurationInterface
                                     ->addDefaultsIfNotSet()
                                         ->children()
                                             ->scalarNode('type')->defaultValue(null)->end()
-                                            ->scalarNode('name')->defaultValue('fos_user_registration_form')->end()
+                                            ->scalarNode('name')->defaultValue('volleyball_user_registration')->end()
                                             ->arrayNode('validation_groups')
                                                 ->prototype('scalar')->end()
                                                 ->defaultValue(array('Registration', 'Default'))
@@ -71,7 +71,7 @@ class Configuration implements ConfigurationInterface
                                     ->addDefaultsIfNotSet()
                                         ->children()
                                             ->scalarNode('type')->defaultValue(null)->end()
-                                            ->scalarNode('name')->defaultValue('fos_user_profile_form')->end()
+                                            ->scalarNode('name')->defaultValue('volleyball_user_profile')->end()
                                             ->arrayNode('validation_groups')
                                                 ->prototype('scalar')->end()
                                                 ->defaultValue(array('Profile', 'Default'))

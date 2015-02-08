@@ -1,5 +1,5 @@
 <?php
-namespace Volleyball\Bundle\UserBundle\DependencyInjection\Compiler;
+namespace Volleyball\Bundle\AttendeeBundle\DependencyInjection\Compiler;
 
 use \Symfony\Component\DependencyInjection\ContainerBuilder;
 

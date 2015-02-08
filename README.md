@@ -1,22 +1,44 @@
-#Volleyball - summercamp scheduling system
-## User Bundle
-This is a bundle utilizing the user component of the Volleyball Scheduling system.  
-This bundle is a customized fork of the [PUGXMultiUserBundle](https://github.com/PUGX/PUGXMultiUserBundle)
+Installation
+============
 
-###Controllers
-- UserController
+Step 1: Download the Bundle
+---------------------------
 
-###Entities
-- Admin
-- User
+Open a command console, enter your project directory and execute the
+following command to download the latest stable version of this bundle:
 
-###Form Types
-- RegistrationFormType
-- UserFormType
-- UserRegistrationFormType
+```bash
+$ composer require VolleyballScheduling/AttendeeBundle "~1"
+```
 
-###Routes
-Name | Path | Parameters
---- | --- | ---
-volleyball_user_index | /users | 
-volleyball_user_register | /signup | 
+This command requires you to have Composer installed globally, as explained
+in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
+of the Composer documentation.
+
+Step 2: Enable the Bundle
+-------------------------
+
+Then, enable the bundle by adding the following line in the `app/AppKernel.php`
+file of your project:
+
+```php
+<?php
+// app/AppKernel.php
+
+// ...
+class AppKernel extends Kernel
+{
+    public function registerBundles()
+    {
+        $bundles = array(
+            // ...
+
+            new \Volleyball\Bundle\AttendeeBundle\VolleyballAttendeeBundle(),
+        );
+
+        // ...
+    }
+
+    // ...
+}
+```
