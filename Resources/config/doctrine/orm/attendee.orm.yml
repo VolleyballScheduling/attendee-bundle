@@ -1,0 +1,182 @@
+Volleyball\Bundle\AttendeeBundle\Entity\Attendee:
+    type: entity
+    table: attendee
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        firstName:
+            type: string
+        lastName:
+            type: string
+        gender:
+            type: string
+        birthdate:
+            type: datetime
+        avatar:
+            type: string
+            options:
+                default: /bundles/volleyballuser/img/avatars/default.png
+        slug:
+            type: string
+            length: 128
+            gedmo:
+                slug:
+                    fields: { firstName, lastName }
+        created:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updated:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update
+    manyToOne:
+        passel:
+            targetEntity: Volleyball\Bundle\PasselBundle\Entity\Passel
+            inversedBy: attendee
+            joinColumn:
+                name: passel_id
+                referencedXColumnName: id
+        faction:
+            targetEntity: Volleyball\Bundle\PasselBundle\Entity\Faction
+            inversedBy: attendee
+            joinColumn:
+                name: faction_id
+                referencedColumnName: id
+        position:
+            targetEntity: Volleyball\Bundle\AttendeeBundle\Entity\Position
+            inversedBy: attendee
+            joinColumn:
+                name: position_id
+                referencedColumnName: id
+        level:
+            targetEntity: Volleyball\Bundle\AttendeeBundle\Entity\Level
+            inversedBy: attendee
+            joinColumn:
+                name: level_id
+                referencedColumnName: id
+        activeEnrollment:
+            targetEntity: Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment
+            inversedBy: attendee
+            joinColumn: 
+                name: active_enrollment_id
+                referencedColumnName: id
+    oneToMany:
+        enrollments:
+            targetEntity: Volleyball\Bundle\EnrollmentBundle\Entity\AttendeeEnrollment
+            mappedBy: attendee
+    properties:
+        firstName:
+            - Length:
+                min: 2
+                max: 250
+                minMessage: "First name must be atleast {{ limit }} characters."
+                maxMessage: "First name must be less than {{ limit }} characters."
+            - NotBlank:
+                message: "Please enter your first name."
+                groups: { "registration", "profile" }                   
+        lastName:
+            - Length:
+                min: 2
+                max: 250
+                minMessage: "Last name must be atleast {{ limit }} characters."
+                maxMessage: "Last name must be less than {{ limit }} characters."
+            - NotBlank:
+                    message: "Please enter your lsrst name."
+                    groups: { "registration", "profile" }   
+        gender:
+            - Length:
+                min: 1
+                max: 1
+                minMessage: "Last name must be atleast {{ limit }} characters."
+                maxMessage: "Last name must be less than {{ limit }} characters."
+            - Choice:
+                choices: [m, f]
+                message: Choose a valid gender.
+        birthdate:
+            - Date: ~
+        avatar: ~
+Volleyball\Bundle\AttendeeBundle\Entity\Level:
+    type: entity
+    table: level
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+        description:
+            type: string
+            nullable: true
+        special:
+            type: boolean
+            options:
+                default: false
+        slug:
+            type: string
+            length: 128
+            gedmo:
+                slug:
+                    fields: { name }
+        created:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updated:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update
+    oneToMany:
+        attendees:
+            targetEntity: Volleyball\Bundle\AttendeeBundle\Entity\Attendee
+            mappedBy: level
+        organizations:
+            targetEntity: Volleyball\Bundle\OrganizationBundle\Entity\Organization
+            mappedBy: level            
+Volleyball\Bundle\AttendeeBundle\Entity\Position:
+    type: entity
+    table: attendee_position
+    id:
+        id:
+            type: integer
+            generator: { strategy: AUTO }
+    fields:
+        name:
+            type: string
+        description:
+            type: string
+            nullable: true
+        slug:
+            type: string
+            length: 128
+            gedmo:
+                slug:
+                    fields: { name }
+        created:
+            type: date
+            gedmo:
+                timestampable:
+                    on: create
+        updated:
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update
+    oneToMany:
+        attendees:
+            targetEntity: Volleyball\Bundle\AttendeeBundle\Entity\Attendee
+            mappedBy: attendee_position
+    manyToOne:
+        organization:
+            targetEntity: Volleyball\Bundle\OrganizationBundle\Entity\Organization
+            inversedBy: attendee_position
+            joinColumn:
+                name: organization_id
+                referencedColumnName: id

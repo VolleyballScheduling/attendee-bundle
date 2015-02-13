@@ -1,19 +1,12 @@
 <?php
 namespace Volleyball\Bundle\AttendeeBundle\Entity;
 
-use \Doctrine\ORM\Mapping as ORM;
-use \Gedmo\Mapping\Annotation as Gedmo;
-use \Symfony\Component\Validator\Constraints as Assert;
 use \Doctrine\Common\Collections\ArrayCollection;
 
 use \Volleyball\Bundle\AttendeeBundle\Traits\HasAttendeesTrait;
-use \Volleyball\Bundle\UtilityBundle\Traits\SluggableTrait;
-use \Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
+use \Volleyball\Bundle\CoreBundle\Traits\SluggableTrait;
+use \Volleyball\Bundle\CoreBundle\Traits\TimestampableTrait;
 
-/**
- * @ORM\Entity(repositoryClass="Volleyball\Bundle\AttendeeBundle\Repository\LevelRepository")
- * @ORM\Table(name="attendee_level")
- */
 class Level
 {
     use HasAttendeesTrait;
@@ -21,30 +14,32 @@ class Level
     use TimestampableTrait;
     
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * Id
+     * @var integer
      */
     protected $id;
 
     /**
-     * @var  string name
-     * @ORM\Column(name="name", type="string")
+     * Name
+     * @var string
      */
     protected $name;
     
     /**
+     * Description
      * @var string
      */
     protected $description;
 
     /**
-     * @ORM\Column(type="boolean")
+     * Special
+     * @var boolean
      */
     protected $special;
     
     /**
-     * @ORM\OneToMany(targetEntity="Volleyball\Bundle\OrganizationBundle\Entity\Organization", mappedBy="level")
+     * Organizations
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $organizations;
     
@@ -58,7 +53,8 @@ class Level
     }
 
     /**
-     * @{inheritdocs}
+     * Get name
+     * @return string
      */
     public function getName()
     {
@@ -66,7 +62,9 @@ class Level
     }
 
     /**
-     * @{inheritdocs}
+     * Set name
+     * @param string $name
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Level
      */
     public function setName($name)
     {
@@ -76,7 +74,8 @@ class Level
     }
 
     /**
-     * @{inheritdocs}
+     * Get description
+     * @return string
      */
     public function getDescription()
     {
@@ -84,7 +83,9 @@ class Level
     }
 
     /**
-     * @{inheritdocs}
+     * Set description
+     * @param string $description
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Level
      */
     public function setDescription($description)
     {
@@ -94,7 +95,8 @@ class Level
     }
 
     /**
-     * @{inheritdocs}
+     * Get organizations
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getOrganizations()
     {
@@ -102,7 +104,9 @@ class Level
     }
     
     /**
-     * @{inheritdocs}
+     * Set organizations
+     * @param array $organizations
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Level
      */
     public function setOrganizations(array $organizations)
     {
@@ -116,7 +120,9 @@ class Level
     }
     
     /**
-     * @{inheritdocs}
+     * Get organization
+     * @param string $organization
+     * @return \Volleyball\Bundle\OrganizationBundle\Entity\Organization
      */
     public function getOrganization($organization)
     {
@@ -124,7 +130,9 @@ class Level
     }
 
     /**
-     * @{inheritdocs}
+     * Add organization
+     * @param \Volleyball\Bundle\OrganizationBundle\Entity\Organization $organization
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Level
      */
     public function addOrganization(\Volleyball\Bundle\OrganizationBundle\Entity\Organization $organization)
     {
@@ -132,9 +140,21 @@ class Level
 
         return $this;
     }
+    
+    /**
+     * Has organization
+     * @param string $organization
+     * @return boolean
+     */
+    public function hasOrganization($organization)
+    {
+        return $this->organizations->contains($organization);
+    }
 
     /**
-     * @{inheritdocs}
+     * Is special
+     * @param boolean|null $special
+     * @return boolean|\Volleyball\Bundle\AttendeeBundle\Entity\Level
      */
     public function isSpecial($special = null)
     {
@@ -153,6 +173,7 @@ class Level
     public function __construct()
     {
         $this->attendees = new ArrayCollection();
+        $this->organizations = new ArrayCollection();
         $this->special = false;
     }
     

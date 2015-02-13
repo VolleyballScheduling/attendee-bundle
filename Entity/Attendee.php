@@ -1,166 +1,121 @@
 <?php
 namespace Volleyball\Bundle\AttendeeBundle\Entity;
 
-use \Doctrine\ORM\Mapping as ORM;
 use \Doctrine\Common\Collections\ArrayCollection;
-use \Gedmo\Mapping\Annotation as Gedmo;
-use \Symfony\Component\Validator\Constraints as Assert;
-use \Volleyball\Bundle\UserBundle\Validator\Constraints\UniqueEntity;
 
-/**
- * @ORM\Table(name="attendee")
- * @ORM\Entity
- * @UniqueEntity(
- *      fields = "username",
- *      targetClass = "Volleyball\Bundle\UserBundle\Entity\User",
- *      message="fos_user.username_already"
- * )
- * @UniqueEntity(
- *      fields = "email",
- *      targetClass = "Volleyball\Bundle\UserBundle\Entity\User",
- *      message="fos_user.email_already"
- * )
- */
 class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 {
     /**
-     * @var integer $id
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * Id
+     * @var integer
      */
     protected $id;
     
     /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Please enter your first name.", groups={"Registration", "Profile"})
-     * @Assert\Length(
-     *     min="3",
-     *     minMessage="The name is too short.",
-     *     groups={"Registration", "Profile"},
-     *     max="255",
-     *     maxMessage="The name is too long."
-     *)
+     * First name
+     * @var string 
      */
     protected $firstName;
 
     /**
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Please enter your last name.", groups={"Registration", "Profile"})
-     * @Assert\Length(
-     *     min="3",
-     *     minMessage="The name is too short.",
-     *     groups={"Registration", "Profile"},
-     *     max="255",
-     *     maxMessage="The name is too long."
-     *)
+     * Last name
+     * @var string 
      */
     protected $lastName;
 
     /**
-     * @ORM\Column(type="string")
-     * @Assert\Length(
-     *      min = "1",
-     *      max = "1",
-     *      minMessage = "Must be at least {{ limit }} characters length",
-     *      maxMessage = "Cannot be longer than {{ limit }} characters length"
-     * )
-     * @Assert\NotBlank()
-     * @Assert\Choice(choices = {"M", "F"})
+     * Gender
+     * @var string
      */
     protected $gender;
    
     /**
-     * @ORM\Column(type="date")
-     * @Assert\NotBlank()
+     * Birthdate
+     * @var \DateTime 
      */
     protected $birthdate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\EnrollmentBundle\Entity\PasselEnrollment", inversedBy="user")
-     * @ORM\JoinColumn(name="activeEnrollment_id", referencedColumnName="id", nullable=true)
+     * Active enrollment
+     * @var \Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment 
      */
     protected $activeEnrollment;
 
     /**
+     * Facebook id
      * @var string
-     *
-     * @ORM\Column(name="facebookId", type="string", length=255, nullable=true)
      */
     protected $facebookId;
 
     /**
+     * Google id
      * @var string
-     *
-     * @ORM\Column(name="googleId", type="string", length=255, nullable=true)
      */
     protected $googleId;
 
     /**
+     * Linkedin id
      * @var string
-     *
-     * @ORM\Column(name="linkedinId", type="string", length=255, nullable=true)
      */
     protected $linkedinId;
 
     /**
+     * Twitter id
      * @var string
-     *
-     * @ORM\Column(name="twitterId", type="string", length=255, nullable=true)
      */
     protected $twitterId;
 
     /**
+     * Foursquare id
      * @var string
-     *
-     * @ORM\Column(name="foursquareId", type="string", length=255, nullable=true)
      */
     protected $foursquareId;
 
     /**
+     * Avatar
      * @var string
-     *
-     * @ORM\Column(name="avatar", type="string", length=255)
      */
-    protected $avatar = '/bundles/volleyballresource/images/avatars/default.png';
+    protected $avatar;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\PasselBundle\Entity\Passel", inversedBy="attendee")
-     * @ORM\JoinColumn(name="passel_id", referencedColumnName="id")
+     * Passel
+     * @var \Volleyball\Bundle\PasselBundle\Entity\Passel
      */
     protected $passel;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\PasselBundle\Entity\Faction", inversedBy="attendees")
-     * @ORM\JoinColumn(name="faction_id", referencedColumnName="id")
+     * Faction
+     * @var \Volleyball\Bundle\PasselBundle\Entity\Faction
      */
     protected $faction;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\AttendeeBundle\Entity\Position", inversedBy="attendees")
-     * @ORM\JoinColumn(name="position_id", referencedColumnName="id")
+     * Position
+     * @var \Volleyball\Bundle\AttendeeBundle\Entity\Position
      */
     protected $position;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\AttendeeBundle\Entity\Level", inversedBy="attendees")
-     * @ORM\JoinColumn(name="level_id", referencedColumnName="id")
+     * Level
+     * @var \Volleyball\Bundle\AttendeeBundle\Entitty\Level
      */
     protected $level;
     
     /**
-     * @ORM\OneToMany(targetEntity="Volleyball\Bundle\EnrollmentBundle\Entity\AttendeeEnrollment", mappedBy="passel")
+     * Enrollments
+     * @var \Doctrine\Common\Collections\ArrayCollection
      */
     protected $enrollments;
     
     /**
-    * @Gedmo\Slug(fields={"lastName", "firstName"})
-    * @ORM\Column(length=128, unique=true)
-    */
+     * Slug
+     * @var string
+     */
     protected $slug;
 
     /**
      * Get slug
+     * @return string
      */
     public function getSlug()
     {
@@ -169,6 +124,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 
     /**
      * Set slug
+     * @param slug $slug
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setSlug($slug = null)
     {
@@ -183,13 +140,17 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
         return $this;
     }
 
+    /**
+     * Get name
+     * @return string
+     */
     public function getName()
     {
         return $this->firstName.' '.$this->lastName;
     }
 
     /**
-     * Get the full name of the user (first + last name)
+     * Get the full name
      * @return string
      */
     public function getFullName()
@@ -198,12 +159,11 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Set activeEnrollment
-     *
-     * @param  Volleyball\Bundle\EnrollmentBundle\Entity\PasselEnrollment $activeEnrollment
-     * @return User
+     * Set active enrollment
+     * @param \Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment $activeEnrollment
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
-    public function setActiveEnrollment(\Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment $activeEnrollment = null)
+    public function setActiveEnrollment(\Volleyball\Bundle\EnrollmentBundle\Entity\ActiveEnrollment $activeEnrollment)
     {
         $this->activeEnrollment = $activeEnrollment;
 
@@ -211,9 +171,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get activeEnrollment
-     *
-     * @return Volleyball\Bundle\EnrollmentBundle\Entity\PasselEnrollment
+     * Get active enrollment
+     * @return \Volleyball\Bundle\EnrollmentBundle\Entity\AttendeeEnrollment
      */
     public function getActiveEnrollment()
     {
@@ -221,8 +180,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @param  string $facebookId
-     * @return void
+     * Set facebook id
+     * @param string $facebookId
      */
     public function setFacebookId($facebookId)
     {
@@ -232,6 +191,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
+     * Get facebook id
      * @return string
      */
     public function getFacebookId()
@@ -240,6 +200,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
+     * Set FB data
      * @param Array
      */
     public function setFBData($fbdata)
@@ -260,8 +221,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @param  string $firstname
-     * @return User
+     * Set first name
+     * @param string $firstname
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setFirstName($firstname)
     {
@@ -271,8 +233,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get first_name
-     *
+     * Get first name
      * @return string
      */
     public function getFirstName()
@@ -281,10 +242,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Set last_name
-     *
-     * @param  string $lastname
-     * @return User
+     * Set last name
+     * @param string $lastname
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setLastName($lastname)
     {
@@ -294,8 +254,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get last_name
-     *
+     * Get last name
      * @return string
      */
     public function getLastName()
@@ -305,9 +264,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     
     /**
      * Set username
-     *
-     * @param  string $username
-     * @return User
+     * @param string $username
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setUsername($username)
     {
@@ -318,7 +276,6 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 
     /**
      * Get username
-     *
      * @return string
      */
     public function getUsername()
@@ -327,10 +284,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Set googleId
-     *
-     * @param  string $googleId
-     * @return User
+     * Set google id
+     * @param string $googleId
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setGoogleId($googleId)
     {
@@ -340,8 +296,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get googleId
-     *
+     * Get google id
      * @return string
      */
     public function getGoogleId()
@@ -350,10 +305,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Set linkedinId
-     *
-     * @param  string $linkedinId
-     * @return User
+     * Set linkedin id
+     * @param string $linkedinId
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setLinkedinId($linkedinId)
     {
@@ -363,8 +317,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get linkedinId
-     *
+     * Get linkedin id
      * @return string
      */
     public function getLinkedinId()
@@ -373,10 +326,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Set twitterId
-     *
-     * @param  string $twitterId
-     * @return User
+     * Set twitter id
+     * @param string $twitterId
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setTwitterId($twitterId)
     {
@@ -386,8 +338,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get twitterId
-     *
+     * Get twitter id
      * @return string
      */
     public function getTwitterId()
@@ -396,10 +347,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Set foursquareId
-     *
-     * @param  string $foursquareId
-     * @return User
+     * Set foursquare id
+     * @param string $foursquareId
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setFoursquareId($foursquareId)
     {
@@ -409,8 +359,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get foursquareId
-     *
+     * Get foursquare id
      * @return string
      */
     public function getFoursquareId()
@@ -420,9 +369,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 
     /**
      * Set avatar
-     *
-     * @param  string $avatar
-     * @return User
+     * @param string $avatar
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setAvatar($avatar)
     {
@@ -433,7 +381,6 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 
     /**
      * Get avatar
-     *
      * @return string
      */
     public function getAvatar()
@@ -441,16 +388,10 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
         return $this->avatar;
     }
 
-    public function getUrl()
-    {
-        return $this->url;
-    }
-   
     /**
      * Set gender
-     *
      * @param string $gender
-     * @return User
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setGender($gender)
     {
@@ -461,8 +402,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 
     /**
      * Get gender
-     *
-     * @return string 
+     * @return string
      */
     public function getGender()
     {
@@ -471,9 +411,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 
     /**
      * Set birthdate
-     *
      * @param \DateTime $birthdate
-     * @return User
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setBirthdate(\DateTime $birthdate)
     {
@@ -484,14 +423,18 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
 
     /**
      * Get birthdate
-     *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getBirthdate()
     {
         return $this->birthdate;
     }
     
+    /**
+     * Is enabled
+     * @param boolean|null $enabled
+     * @return boolean|\Volleyball\Bundle\AttendeeBundle\Entity\Attendee
+     */
     public function isEnabled($enabled = null)
     {
         if (null == $enabled) {
@@ -513,7 +456,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
     
     /**
-     * @{inheritdocs}
+     * Get passel
+     * @return \Volleyball\Bundle\PasselBundle\Entity\Passel
      */
     public function getPassel()
     {
@@ -521,7 +465,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @{inheritdocs}
+     * Set passel
+     * @param \Volleyball\Bundle\PasselBundle\Entity\Passel $passel
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setPassel(\Volleyball\Bundle\PasselBundle\Entity\Passel $passel)
     {
@@ -531,7 +477,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @{inheritdocs}
+     * Get faction
+     * @return \Volleyball\Bundle\PasselBundle\Entity\Faction
      */
     public function getFaction()
     {
@@ -539,7 +486,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @{inheritdocs}
+     * Set faction
+     * @param \Volleyball\Bundle\PasselBundle\Entity\Faction $faction
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setFaction(\Volleyball\Bundle\PasselBundle\Entity\Faction $faction)
     {
@@ -549,7 +498,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @{inheritdocs}
+     * Get position
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Position
      */
     public function getPosition()
     {
@@ -557,7 +507,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @{inheritdocs}
+     * Set position
+     * @param \Volleyball\Bundle\AttendeeBundle\Entity\Position $position
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setPosition(\Volleyball\Bundle\AttendeeBundle\Entity\Position $position)
     {
@@ -567,7 +519,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @{inheritdocs}
+     * Get level
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Level
      */
     public function getLevel()
     {
@@ -575,7 +528,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * @{inheritdocs}
+     * Set level
+     * @param \Volleyball\Bundle\AttendeeBundle\Entity\Level $level
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
     public function setLevel(\Volleyball\Bundle\AttendeeBundle\Entity\Level $level)
     {
@@ -585,8 +540,8 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
     
     /**
-     * Get attendee enrollments
-     * @return array
+     * Get enrollments
+     * @return \Doctrine\Common\Collections\ArrayCollection
      */
     public function getEnrollments()
     {
@@ -594,7 +549,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Set attendee enrollments
+     * Set enrollments
      * @param array $enrollments
      * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
@@ -619,7 +574,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Add attendee enrollment
+     * Add enrollment
      * @param \Volleyball\Bundle\EnrollmentBundle\Entity\Attendee $enrollment
      * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
@@ -631,7 +586,7 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Remove attendee enrollment
+     * Remove enrollment
      * @param string|\Volleyball\Bundle\EnrollmentBundle\Entity\Attendee $enrollment
      * @return \Volleyball\Bundle\AttendeeBundle\Entity\Attendee
      */
@@ -643,9 +598,9 @@ class Attendee extends \Volleyball\Bundle\UserBundle\Entity\User
     }
 
     /**
-     * Get a attendee enrollment
-     * @param \Volleyball\Bundle\EnrollmentBundle\Entity\Attendee|String $enrollment enrollment
-     * @return Enrollment
+     * Get enrollment
+     * @param string $enrollment
+     * @return \Volleyball\Bundle\EnrollmentBundle\Entity\AttendeeEnrollment
      */
     public function getEnrollment($enrollment)
     {

@@ -1,19 +1,12 @@
 <?php
 namespace Volleyball\Bundle\AttendeeBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
+use \Doctrine\Common\Collections\ArrayCollection;
 
-use Volleyball\Bundle\AttendeeBundle\Traits\HasAttendeesTrait;
-use Volleyball\Bundle\UtilityBundle\Traits\SluggableTrait;
-use Volleyball\Bundle\UtilityBundle\Traits\TimestampableTrait;
+use \Volleyball\Bundle\AttendeeBundle\Traits\HasAttendeesTrait;
+use \Volleyball\Bundle\CoreBundle\Traits\SluggableTrait;
+use \Volleyball\Bundle\CoreBundle\Traits\TimestampableTrait;
 
-/**
- * @ORM\Table(name="passel_position")
- * @ORM\Entity(repositoryClass="Volleyball\Bundle\AttendeeBundle\Repository\PositionRepository")
- */
 class Position
 {
     use HasAttendeesTrait;
@@ -21,34 +14,31 @@ class Position
     use TimestampableTrait;
     
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * Id
+     * @var integer
      */
     protected $id;
 
     /**
      * Name
-     * @var  string name
-     * @ORM\Column(name="name", type="string")
+     * @var string
      */
-    protected $name = '';
+    protected $name;
 
     /**
      * Description
      * @var string
      */
-    protected $description = '';
+    protected $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Volleyball\Bundle\OrganizationBundle\Entity\Organization", inversedBy="position")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id")
+     * Organization
+     * @var \Volleyball\Bundle\OrganizationBundle\Entity\Organization
      */
-    protected $organization = '';
+    protected $organization;
     
     /**
      * Get id
-     *
      * @return integer
      */
     public function getId()
@@ -57,7 +47,8 @@ class Position
     }
 
     /**
-     * @{inheritdocs}
+     * Get name
+     * @return string
      */
     public function getName()
     {
@@ -65,7 +56,9 @@ class Position
     }
 
     /**
-     * @{inheritdocs}
+     * Set name
+     * @param string $name
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Position
      */
     public function setName($name)
     {
@@ -75,7 +68,8 @@ class Position
     }
 
     /**
-     * @{inheritdocs}
+     * Get description
+     * @return string
      */
     public function getDescription()
     {
@@ -83,7 +77,9 @@ class Position
     }
 
     /**
-     * @{inheritdocs}
+     * Set description
+     * @param string $description
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Position
      */
     public function setDescription($description)
     {
@@ -94,7 +90,8 @@ class Position
 
 
     /**
-     * @{inheritdocs}
+     * Get organization
+     * @return \Volleyball\Bundle\OrganizationBundle\Entity\Organization
      */
     public function getOrganization()
     {
@@ -102,9 +99,11 @@ class Position
     }
 
     /**
-     * @{inheritdocs}
+     * Set organization
+     * @param \Volleyball\Bundle\OrganizationBundle\Entity\Organization $organization
+     * @return \Volleyball\Bundle\AttendeeBundle\Entity\Position
      */
-    public function setOrganization(\Volleyball\Component\Organization\Model\Organization $organization)
+    public function setOrganization(\Volleyball\Bundle\OrganizationBundle\Entity\Organization $organization)
     {
         $this->organization = $organization;
 
