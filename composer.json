@@ -1,14 +1,14 @@
 {
-    "name": "volleyball/user-bundle",
+    "name": "volleyball/attendee-bundle",
     "type": "library",
-    "description": "user bundle utilizing the user component of the volleyball system.",
+    "description": "attendee bundle utilizing the user, core and passel bundles of the volleyball system.",
     "keywords": [
         "scheduling",
         "scheduling system",
         "user",
-        "vb class",
-        "class",
-        "requirement"
+        "attendee",
+        "level",
+        "position"
     ],
     "homepage": "http://volleyball.daviddurost.net",
     "license": "MIT",
@@ -20,7 +20,9 @@
     ],
     "require": {
         "php": ">=5.4",
-        "friendsofsymfony/user-bundle": "2.0.x-dev@dev"
+        "volleyball/user-bundle": "@dev",
+        "volleyball/core-bundle": "@dev",
+        "volleyball/passel-bundle": "@dev"
     },
     "require-dev": {
     },
