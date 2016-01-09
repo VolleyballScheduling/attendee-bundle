@@ -2,38 +2,28 @@
 namespace Volleyball\Bundle\AttendeeBundle;
 
 use \Symfony\Component\DependencyInjection\ContainerBuilder;
-use \Sylius\Bundle\ResourceBundle\AbstractResourceBundle;
-use \Sylius\Bundle\ResourceBundle\SyliusResourceBundle;
 
-use \Volleyball\Bundle\AttendeeBundle\DependencyInjection\Compiler\OverrideServiceCompilerPass;
-
-class VolleyballAttendeeBundle extends AbstractResourceBundle
+class VolleyballAttendeeBundle extends \Knp\RadBundle\AppBundle\Bundle
 {
     /**
-     * {@inheritdoc}
+     * @{inheritdoc}
      */
-    public static function getSupportedDrivers()
+    public function buildConfiguration(NodeParentInterface $rootNode)
     {
-        return array(
-            SyliusResourceBundle::DRIVER_DOCTRINE_ORM
-        );
     }
-    
+
     /**
-     * {@inheritdoc}
+     * @{inheritdoc}
      */
-    public function build(ContainerBuilder $container)
+    public function buildContainer(array $config, ContainerBuilder $container)
     {
-        parent::build($container);
-        
-        $container->addCompilerPass(new OverrideServiceCompilerPass());
     }
-    
+
     /**
      * {@inheritdoc}
      */
     protected function getBundlePrefix()
     {
-        return 'volleyball_user';
+        return 'volleyball_attendee';
     }
 }

@@ -1,118 +1,63 @@
 <?php
 namespace Volleyball\Bundle\AttendeeBundle\Controller;
 
-use \Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use \Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use \Symfony\Component\HttpFoundation\Request;
-
-class AttendeeController extends \Volleyball\Bundle\CoreBundle\Controller\CoreController
+class AttendeeController extends \Volleyball\Bundle\UtilityBundle\Controller\Controller
 {
     /**
-     * @Route("/attendees", name="volleyball_attendee_index")
-     * @Route("/passels/{passel}/attendees", name="volleyball_attendee_index_by_passel")
-     * @Route("/passels/{passel}/factions/{faction}/attendees", name="volleyball_attendee_index_by_faction")
-     * @Template("VolleyballResourceBundle:Attendee:index.html.twig")
+     * Index action
+     * @inheritdoc
      */
-    public function indexAction(Request $request)
+    public function indexAction(array $attendees)
     {
-        return parent::indexAction($request);
+        return ['attendees' => $this->getAttendees()];
     }
 
     /**
-     * @Route("/attendees/new", name="volleyball_attendee_new")
-     * @Template("VolleyballPasselbundle:Attendee:new.html.twig")
+     * New action
+     * @inheritdoc
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
-        $attendee = $this->get('volleyball.repository.attendee')->createNew();
-        $form = $this->createForm(
-            new \Volleyball\Bundle\AttendeeBundle\Form\Type\AttendeeFormType(),
-            $attendee
-        );
+        $attendee = new \Volleyball\Bundle\AttendeeBundle\Entity\Attendee();
+        $form = $this->createBoundObjectForm($attendee, 'new');
 
-        if ("POST" == $request->getMethod()) {
-            $form->handleRequest($this->getRequest());
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getEntityManager();
-                $em->persist($attendee);
-                $em->flush();
+        if ($form->isBound() && $form->isValid()) {
+            $this->persist($attendee, true);
+            $this->addFlash('attendee created');
 
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    'attendee created.'
-                );
-
-                return $this->render(
-                    'VolleyballAttendeeBundle:Attendee:show.html.twig',
-                    array('attendee' => $attendee )
-                );
-            }
+            return $this->redirectToRoute('volleyball_attendees_index');
         }
 
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
     
     /**
-     * @Route("/attendees/search", name="volleyball_attendee_search")
-     * @Template("VolleyballAttendeeBundle:Attendee:search.html.twig")
+     * Search action
+     * @inheritdoc
      */
-    public function searchAction(Request $request)
+    public function searchAction(array $attendees)
     {
-        $form = $this->createForm(new \Volleyball\Bundle\AttendeeBundle\Form\Type\Search\AttendeeSearchFormType());
+        $attendee = new \Volleyball\Bundle\AttendeeBundle\Entity\Attendee();
+        $form = $this->createBoundObjectForm($attendee, 'search');
         
-        if ("POST" == $request->getMethod()) {
-            $form->handleRequest($request);
-            if ($form->isValid()) {
-                $attendees = $this->repository()->search($request->getParameter('query'));
+        if ($form->isBound() && $form->isValid()) {
+            /** @TODO finish attendee search, also restrict access */
+            $attendees = array();
 
-                return $this->render(
-                    'VolleyballAttendeeBundle:Attendee:index.html.twig',
-                    array('attendees' => $attendees )
-                );
-            }
+            return ['attendees' => $attendees];
         }
 
-        return array('form' => $form->createView());
+        return ['form' => $form->createView()];
     }
     
     /**
-     * @Route("/attendees/{slug}", name="volleyball_attendee_show")
-     * @Template("VolleyballAttendeeBundle:Attendee:show.html.twig")
+     * Show action
+     * @inheritdoc
      */
-    public function showAction(Request $request)
+    public function showAction(\Volleyball\Bundle\AttendeeBundle\Entity\Attendee $attendee)
     {
-        $slug = $request->getParameter('slug');
-        $attendee = $this->get('volleyball.repository.attendee')
-            ->findOneBySlug($slug);
+        return ['attendee' => $attendee];
+    }
 
-        if (!$attendee) {
-            $this->get('session')->getFlashBag()->add(
-                'error',
-                'no matching attendee found.'
-            );
-            $this->redirect($this->generateUrl('volleyball_attendee_index'));
-        }
 
-        return array('attendee' => $attendee);
-    }
-    
-    public function registerAction()
-    {
-        return $this
-                ->container
-                ->get('pugx_multi_user.registration_manager')
-                ->register('Volleyball\Bundle\AttendeeBundle\Entity\Attendee');
-    }
-    
-    /**
-     * @Route("/widget", name="volleyball_attendee_widget")
-     */
-    public function widgetAction(Request $request)
-    {
-        $factions = $this->getDoctrine()
-                ->getRepository('VolleyballAttendeeBundle:Attendee')
-                ->findAllByPassel($this->getUser()->getPassel());
-        
-        return $factions;
-    }
 }

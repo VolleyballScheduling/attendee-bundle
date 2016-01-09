@@ -1,5 +1,5 @@
 <?php
-namespace Volleyball\Bundle\AttendeeBundle\Form\Type\Search;
+namespace Volleyball\Bundle\AttendeeBundle\Form\Type;
 
 class AttendeeSearchFormType extends \Volleyball\Bundle\CoreBundle\Form\Type\SearchFormType
 {
@@ -12,7 +12,7 @@ class AttendeeSearchFormType extends \Volleyball\Bundle\CoreBundle\Form\Type\Sea
     public function setDefaultOptions(\Symfony\Component\OptionsResolver\OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Volleyball\Bundle\PasselBundle\Entity\Attendee'
+            'data_class' => 'Volleyball\Bundle\AttendeeBundle\Entity\Attendee'
         ));
     }
 
@@ -21,3 +21,4 @@ class AttendeeSearchFormType extends \Volleyball\Bundle\CoreBundle\Form\Type\Sea
         return 'attendee_search';
     }
 }
+    `````                           

@@ -1,44 +1,25 @@
-Installation
-============
+#Volleyball
+##Summer Camp Scheduling System
+###Attendee Bundle
 
-Step 1: Download the Bundle
----------------------------
+This is a bundle utilizing the passel component of the Volleyball Scheduling system.
 
-Open a command console, enter your project directory and execute the
-following command to download the latest stable version of this bundle:
+##Documentation
+- 
 
-```bash
-$ composer require VolleyballScheduling/AttendeeBundle "~1"
-```
+##Overview
+###Controllers
+- 
 
-This command requires you to have Composer installed globally, as explained
-in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
-of the Composer documentation.
+###Entities
+- 
 
-Step 2: Enable the Bundle
--------------------------
+###Form Types
+- 
 
-Then, enable the bundle by adding the following line in the `app/AppKernel.php`
-file of your project:
+###Repositories
+- 
 
-```php
-<?php
-// app/AppKernel.php
-
-// ...
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-
-            new \Volleyball\Bundle\AttendeeBundle\VolleyballAttendeeBundle(),
-        );
-
-        // ...
-    }
-
-    // ...
-}
-```
+###Routes
+Route Name | Route Path
+---|---|---
